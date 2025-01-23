@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "8fc14116-0978-4b63-8324-cd4cf2562c02",
+		"name": "Geo-Spatial Data",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40883533"
+	},
+	"item": [
+		{
+			"name": "Get Data from Location",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/geo-data?lat=50.1109&lon=8.6821",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"geo-data"
+					],
+					"query": [
+						{
+							"key": "lat",
+							"value": "50.1109",
+							"description": "Lat stands for Latitude\n"
+						},
+						{
+							"key": "lon",
+							"value": "8.6821",
+							"description": "Lon stands for Longitude"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create New GeoData",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n            \"location\":\"Frankfurt\" ,\n            \"latitude\": 50.1109,\n            \"longitude\": 8.6821\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/geo-data/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"geo-data",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Geo Data",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/geo-data/all?location=Berlin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"geo-data",
+						"all"
+					],
+					"query": [
+						{
+							"key": "location",
+							"value": "Berlin"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get by ID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/geo-data/6792a2eb8fcee62817838313",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"geo-data",
+						"6792a2eb8fcee62817838313"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
