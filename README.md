@@ -4,16 +4,21 @@ This is for my GeoSpatial Data API Assignment.
 
 ## How to Setup and Run the application:
 1. Open the code in your preferred IDE.
-2. In the terminal, run "npm run dev" to start your local server.
-3. In your IDE, create a .env file that will allow you to store your API key as OPENWEATHER_API_KEY = Your Key Here. You will also need the .env file to have PORT = 3000 or whatever you would like your port on and your MONGODB_URI=mongodb://localhost/27017:geoSpatialData
-4. Open Postman and MongoDB.
-5. In Postman, import the collection file provided in GitHub.
-6. In MongoDB, start a connection to the local server.
-7. To run the requests, enter the information needed for the specific request you want (e.g., GET, POST)
-8. Follow along with the code to see specific pieces you would need: For example, to get by location, you would need latitude and longitude for the API to get the location you are looking for with the data.
-9. Once you POST, check MongoDB to see that your information was added correctly.
-10. You must POST before checking for GET all and GET by ID since these pull from MongoDB instead of the external API.
-11. Have fun looking at the different weather types happening worldwide!
+2. Make sure to install all dependencies by running the following:
+    I. npm init -y
+    II. npm npm install express dotenv morgan
+    III. npm install nodemon -D
+    IV. npm install mongoose 
+4. In the terminal, run "npm run dev" to start your local server.
+5. In your IDE, create a .env file that will allow you to store your API key as OPENWEATHER_API_KEY = Your Key Here. You will also need the .env file to have PORT = 3000 or whatever you would like your port on and your MONGODB_URI=mongodb://localhost/27017:geoSpatialData
+6. Open Postman and MongoDB.
+7. In Postman, import the collection file provided in GitHub.
+8. In MongoDB, start a connection to the local server.
+9. To run the requests, enter the information needed for the specific request you want (e.g., GET, POST)
+10. Follow along with the code to see specific pieces you would need: For example, to get by location, you would need latitude and longitude for the API to get the location you are looking for with the data.
+11. Once you POST, check MongoDB to see that your information was added correctly.
+12. You must POST before checking for GET all and GET by ID since these pull from MongoDB instead of the external API.
+13. Have fun looking at the different weather types happening worldwide!
 <br>
 
 ## Routes and API Used:
