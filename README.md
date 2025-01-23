@@ -5,7 +5,7 @@ This is for my GeoSpatial Data API Assignment.
 ## How to Setup and Run the application:
 1. Open the code in your preferred IDE.
 2. In the terminal, run "npm run dev" to start your local server.
-3. In your IDE, create a .env file that will allow you to store your API key as OPENWEATHER_API_KEY = Your Key Here. You will also need the .env file to have PORT = 3000 or whatever you would like your port on and your MONGODB_URI=mongodb://<localhost>/27017:geoSpatialData
+3. In your IDE, create a .env file that will allow you to store your API key as OPENWEATHER_API_KEY = Your Key Here. You will also need the .env file to have PORT = 3000 or whatever you would like your port on and your MONGODB_URI=mongodb://localhost/27017:geoSpatialData
 4. Open Postman and MongoDB.
 5. In Postman, import the collection file provided in GitHub.
 6. In MongoDB, start a connection to the local server.
