@@ -4,11 +4,7 @@ This is for my GeoSpatial Data API Assignment.
 
 ## How to Setup and Run the application:
 1. Open the code in your preferred IDE.
-2. Make sure to install all dependencies by running the following:
-    I. npm init -y
-    II. npm npm install express dotenv morgan
-    III. npm install nodemon -D
-    IV. npm install mongoose 
+2. Make sure to install all dependencies by running the following: npm init -y, npm install express dotenv morgan, npm install nodemon -D, npm install mongoose.
 4. In the terminal, run "npm run dev" to start your local server.
 5. In your IDE, create a .env file that will allow you to store your API key as OPENWEATHER_API_KEY = Your Key Here. You will also need the .env file to have PORT = 3000 or whatever you would like your port on and your MONGODB_URI=mongodb://localhost/27017:geoSpatialData
 6. Open Postman and MongoDB.
