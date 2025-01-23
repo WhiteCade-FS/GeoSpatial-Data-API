@@ -16,4 +16,4 @@ This is for my GeoSpatial Data API Assignment.
 <br>
 
 ## Routes and API Used:
-The routes used for this project are GET by Location, POST, GET All, and GET by ID. The API used for this project was OpenWeatherMap. No key is needed as one is provided by me for the use of the API, however, that key is not be shared publicly and is hidden.
+The routes used for this project are GET by Location, POST, GET All, and GET by ID. The API used for this project was OpenWeatherMap. A key is needed, however it is very easy to get one. Here is the link to the free key that can be used: https://openweathermap.org/price (There is a free key about halfway down the page), or if you are a student you can get the key that is next to the free key which allows for much more.
