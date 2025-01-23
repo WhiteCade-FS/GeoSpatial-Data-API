@@ -11,3 +11,5 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/geo-data", routeHandler);
+
+module.exports = app;

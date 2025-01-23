@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const geoDataSchema = new mongoose.Schema(
   {
-    location: { type: String, required: true },
+    location: { type: String },
     latitude: { type: Number, required: true },
     longitude: { type: Number, required: true },
     data: { type: Object, required: true },
