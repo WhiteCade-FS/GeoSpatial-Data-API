@@ -1,5 +1,6 @@
 # GeoSpatial-Data-API
 This is for my GeoSpatial Data API Assignment.
+<br>
 
 ## How to Setup and Run the application:
 1. Open the code in your preferred IDE.
