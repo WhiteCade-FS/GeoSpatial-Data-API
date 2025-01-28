@@ -5,24 +5,46 @@ The getGeoDataByLocation will take a longitude and latitude to find the location
 */
 
 const getGeoDataByLocation = async (req, res) => {
-  const { lat, lon } = req.query;
+  const { lat, lon, page = 1, limit = 10 } = req.query;
   if (!lat || !lon) {
     return res
       .status(404)
       .json({ error: "Latitude and longitude are required." });
   }
+
+  const parsedLat = parseFloat(lat);
+  const parsedLon = parseFloat(lon);
+
   const API_KEY = process.env.OPENWEATHER_API_KEY;
   const URL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
   try {
+    const skip = (page - 1) * limit;
     const dataByLocation = await fetch(URL);
-    if (!dataByLocation) {
+    if (!dataByLocation.ok) {
       throw new Error(`API responded with status: ${dataByLocation.status}`);
     }
     const data = await dataByLocation.json();
+    const query = {
+      "location.coordinates": {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [parsedLon, parsedLat],
+          },
+          $maxDistance: 10000,
+        },
+      },
+    };
+
+    const geoData = await GeoData.find(query).select("-__v").skip(skip);
+
     res.status(200).json({
       success: true,
       message: `${req.method} - request to API endpoint`,
-      data: data,
+      data: {
+        weatherData: data,
+        geoData,
+      },
     });
   } catch (error) {
     console.error("Could not find Geo-Spatial Data:", error);
@@ -37,7 +59,7 @@ The createGeoData allows you to input the location name if you want, longitude a
 */
 
 const createGeoData = async (req, res) => {
-  const { location, latitude, longitude } = req.body;
+  const { latitude, longitude } = req.body;
   try {
     const API_KEY = process.env.OPENWEATHER_API_KEY;
     const URL = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`;
@@ -45,11 +67,13 @@ const createGeoData = async (req, res) => {
     const response = await fetch(URL);
     const apiData = await response.json();
     const geoData = {
-      location,
-      latitude,
-      longitude,
+      location: {
+        type: "Point",
+        coordinates: [parseFloat(longitude), parseFloat(latitude)],
+      },
       data: apiData,
     };
+
     const newGeoData = await GeoData.create(geoData);
     console.log("data >>>", newGeoData);
     res.status(201).json({
@@ -73,18 +97,55 @@ The getallGeoData function allows you to find all the data that has been stored 
 */
 
 const getAllGeoData = async (req, res) => {
-  const { location } = req.query;
+  const {
+    location,
+    minLat,
+    maxLat,
+    minLon,
+    maxLon,
+    page = 1,
+    limit = 10,
+    sortField = "location.coordinates.0",
+    sortOrder = "asc",
+  } = req.query;
+
   try {
-    let geoData;
+    const sort = {};
+    sort[sortField] = sortOrder === "asc" ? 1 : -1;
+
+    const skip = (page - 1) * limit;
+    const filter = {};
+
     if (location) {
-      geoData = await GeoData.find({ location });
-    } else {
-      geoData = await GeoData.find({});
+      filter["location.coordinates"] = location;
     }
+
+    if (minLat || maxLat || minLon || maxLon) {
+      if (minLat || maxLat) {
+        filter["location.coordinates.1"] = {};
+        if (minLat) filter["location.coordinates.1"].$gte = minLat;
+        if (maxLat) filter["location.coordinates.1"].$lte = maxLat;
+      }
+
+      if (minLon || maxLon) {
+        filter["location.coordinates.0"] = {};
+        if (minLon) filter["location.coordinates.0"].$gte = minLon;
+        if (maxLon) filter["location.coordinates.0"].$lte = maxLon;
+      }
+    }
+
+    const geoData = await GeoData.find(filter)
+      .select("-__v")
+      .sort(sort)
+      .skip(skip)
+      .limit(limit);
+
     res.status(200).json({
       success: true,
       message: "All geo data fetched successfully",
       data: geoData,
+      page,
+      limit,
     });
   } catch (error) {
     console.error(error);
