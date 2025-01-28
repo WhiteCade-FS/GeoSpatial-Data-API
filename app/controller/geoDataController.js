@@ -44,6 +44,8 @@ const getGeoDataByLocation = async (req, res) => {
       data: {
         weatherData: data,
         geoData,
+        page,
+        limit,
       },
     });
   } catch (error) {

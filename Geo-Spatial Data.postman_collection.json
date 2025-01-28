@@ -8,6 +8,57 @@
 	"item": [
 		{
 			"name": "Get Data from Location",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Returned data matches the limit\", function() {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response.data.geoData.length).to.eql(1);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Pagination works correctly\", function() {",
+							"    const response = pm.response.json();",
+							"    const page = 1;",
+							"    const limit = 1;",
+							"",
+							"    const currentPage = parseInt(response.data.page, 10);",
+							"    console.log(currentPage);",
+							"    const dataLength = response.data.geoData.length; ",
+							"    console.log(dataLength);",
+							"",
+							"    pm.expect(currentPage).to.eql(page); ",
+							"    pm.expect(dataLength).to.eql(limit); ",
+							"});",
+							"",
+							"pm.test(\"Results are sorted in ascending order\", function() {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response.data.geoData).to.be.an('array').that.is.not.empty;",
+							"    pm.expect(response.data.geoData.length).to.be.gte(1);",
+							"",
+							"    const first = response.data.geoData[0].location?.coordinates[1];",
+							"    const second = response.data.geoData[1].location?.coordinates[1];",
+							"",
+							"    pm.expect(first).to.be.lte(second);  ",
+							"});",
+							"pm.test(\"Results are sorted in descending order\", function() {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response.data.geoData).to.be.an('array').that.is.not.empty;",
+							"    pm.expect(response.data.geoData.length).to.be.greaterThan(1);",
+							"",
+							"    const first = response.data.geoData[0].location?.coordinates[1]; ",
+							"    const second = response.data.geoData[1].location?.coordinates[1];",
+							"",
+							"    pm.expect(first).to.be.gte(second);  ",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -24,7 +75,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/geo-data?lat=50.1109&lon=8.6821",
+					"raw": "http://localhost:3000/api/geo-data?lat=48.1920&lon=-114.3168&page=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -37,13 +88,15 @@
 					"query": [
 						{
 							"key": "lat",
-							"value": "50.1109",
-							"description": "Lat stands for Latitude\n"
+							"value": "48.1920"
 						},
 						{
 							"key": "lon",
-							"value": "8.6821",
-							"description": "Lon stands for Longitude"
+							"value": "-114.3168"
+						},
+						{
+							"key": "page",
+							"value": "1"
 						}
 					]
 				}
@@ -60,7 +113,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n            \"location\":\"Frankfurt\" ,\n            \"latitude\": 50.1109,\n            \"longitude\": 8.6821\n}",
+					"raw": "{\n  \"location\": \"Kalispell, Montana\",\n  \"latitude\": 48.1920,\n  \"longitude\": -114.3168\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -85,6 +138,48 @@
 		},
 		{
 			"name": "Get All Geo Data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Returned data matches the limit\", function() {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response.data.length).to.eql(4); ",
+							"});",
+							"",
+							"",
+							"pm.test(\"Pagination works correctly\", function() {",
+							"    const response = pm.response.json();",
+							"    const page = 1;",
+							"    const limit = 4;",
+							"",
+							"    pm.expect(Number(response.page)).to.eql(page);",
+							"    pm.expect(Number(response.data.length)).to.eql(limit);",
+							"});",
+							"",
+							"pm.test(\"Results are sorted in ascending order\", function() {",
+							"    const response = pm.response.json();",
+							"    const first = response.data[0].location.coordinates[1];  ",
+							"    const second = response.data[0].location.coordinates[1];  ",
+							"",
+							"    pm.expect(first).to.be.lte(second);",
+							"});",
+							"",
+							"pm.test(\"Results are sorted in descending order\", function() {",
+							"    const response = pm.response.json();",
+							"    const first = response.data[0].location.coordinates[1];  ",
+							"    const second = response.data[0].location.coordinates[1];  ",
+							"",
+							"    pm.expect(first).to.be.gte(second); ",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -92,7 +187,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/geo-data/all?location=Berlin",
+					"raw": "http://localhost:3000/api/geo-data/all?minLat=10&maxLat=70&minLon=-180&maxLon=180&sortField=location.coordinates.0&sortOrder=asc&page=1&limit=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -105,8 +200,36 @@
 					],
 					"query": [
 						{
-							"key": "location",
-							"value": "Berlin"
+							"key": "minLat",
+							"value": "10"
+						},
+						{
+							"key": "maxLat",
+							"value": "70"
+						},
+						{
+							"key": "minLon",
+							"value": "-180"
+						},
+						{
+							"key": "maxLon",
+							"value": "180"
+						},
+						{
+							"key": "sortField",
+							"value": "location.coordinates.0"
+						},
+						{
+							"key": "sortOrder",
+							"value": "asc"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
 						}
 					]
 				}
@@ -122,7 +245,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/geo-data/6792a2eb8fcee62817838313",
+					"raw": "http://localhost:3000/api/geo-data/679849f4585718762fb75564",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -131,7 +254,7 @@
 					"path": [
 						"api",
 						"geo-data",
-						"6792a2eb8fcee62817838313"
+						"679849f4585718762fb75564"
 					]
 				}
 			},
